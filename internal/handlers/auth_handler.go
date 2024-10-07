@@ -23,15 +23,15 @@ func (h *AuthHandler) Login(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, refreshToken, err := h.authService.Login(loginRequest.Username, loginRequest.Password)
+	response, err := h.authService.Login(loginRequest.Username, loginRequest.Password)
 	if err != nil {
 		ctx.JSON(401, gin.H{"error": "Unauthorized"})
 		return
 	}
 
 	ctx.JSON(200, gin.H{
-		"access_token":  accessToken,
-		"refresh_token": refreshToken,
+		"data":    response,
+		"message": "Login successful",
 	})
 }
 
