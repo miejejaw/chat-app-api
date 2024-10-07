@@ -10,16 +10,20 @@ import (
 func SetupRoutes(router *gin.RouterGroup, db *gorm.DB) {
 	// Set up repositories
 	userRepo := repositories.NewUserRepository(db)
+	messageRepo := repositories.NewMessageRepository(db)
 
 	// Set up services
 	userService := services.NewUserService(userRepo)
 	authService := services.NewAuthService(userRepo)
+	messageService := services.NewMessageService(messageRepo)
 
-	// Authentication routes
+	// routes
 	authRoutes := router.Group("/auth")
-	SetupAuthRoutes(authRoutes, authService)
-
-	// User routes
 	userRoutes := router.Group("/users")
+	messageRoutes := router.Group("/messages")
+
+	// Setup routes
+	SetupAuthRoutes(authRoutes, authService)
 	SetupUserRoutes(userRoutes, userService)
+	SetupMessageRoutes(messageRoutes, messageService)
 }
