@@ -103,10 +103,7 @@ func (r *userRepository) SearchUser(currentUsername string, searchContent string
 		}
 	} else {
 		// Search by first name, last name, or username
-		if err := query.Where("first_name LIKE ?", "%"+searchContent+"%").
-			Or("last_name LIKE ?", "%"+searchContent+"%").
-			Or("username LIKE ?", "%"+searchContent+"%").
-			Find(&users).Error; err != nil {
+		if err := query.Where("(first_name LIKE ? OR last_name LIKE ? OR username LIKE ?) AND username != ?", "%"+searchContent+"%", "%"+searchContent+"%", "%"+searchContent+"%", currentUsername).Find(&users).Error; err != nil {
 			return nil, err
 		}
 	}
