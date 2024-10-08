@@ -3,6 +3,7 @@ package main
 import (
 	"chat-app-api/internal/database"
 	"chat-app-api/internal/routes"
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,6 +16,8 @@ func main() {
 
 	// Check if the environment is development or production
 	env := os.Getenv("GIN_ENV")
+	fmt.Println("Environment: ", env)
+
 	if env == "development" {
 		if err := godotenv.Load(); err != nil {
 			log.Println("No .env file found, using Render's environment variables")

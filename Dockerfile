@@ -14,4 +14,6 @@ RUN go build -o /cmd/app/main .
 
 EXPOSE 8080
 
+COPY .env .env
+
 CMD ["/cmd/app/main"]

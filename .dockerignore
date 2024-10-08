@@ -28,7 +28,7 @@ main
 Thumbs.db
 
 # Ignore environment files
-.env
+#.env
 .env.local
 .env.production
 .env.development
