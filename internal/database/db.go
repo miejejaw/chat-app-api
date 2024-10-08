@@ -25,5 +25,10 @@ func Connect() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to migrate database: %w", err)
 	}
 
+	// Auto migrate models
+	if err := db.AutoMigrate(&models.Message{}); err != nil {
+		return nil, fmt.Errorf("failed to migrate database: %w", err)
+	}
+
 	return db, nil
 }

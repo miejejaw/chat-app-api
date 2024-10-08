@@ -86,3 +86,19 @@ func (ctrl *UserHandler) DeleteUser(c *gin.Context) {
 	}
 	c.Status(http.StatusNoContent)
 }
+
+func (ctrl *UserHandler) SearchUser(c *gin.Context) {
+	currentUsername, exists := c.Get("Username")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not logged in"})
+		return
+	}
+
+	searchContent := c.Query("search")
+	users, err := ctrl.userService.SearchUser(currentUsername.(string), searchContent)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}
