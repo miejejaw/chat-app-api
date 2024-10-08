@@ -14,7 +14,7 @@ import (
 func main() {
 
 	// Check if the environment is development or production
-	env := os.Getenv("GIN_MODE")
+	env := os.Getenv("GIN_ENV")
 	if env == "development" {
 		if err := godotenv.Load(); err != nil {
 			log.Println("No .env file found, using Render's environment variables")
