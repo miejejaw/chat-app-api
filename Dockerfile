@@ -12,7 +12,7 @@ WORKDIR /app/cmd/app
 
 RUN go build -o /cmd/app/main .
 
-COPY .env .env
+#COPY .env .env
 
 EXPOSE 8080
 
