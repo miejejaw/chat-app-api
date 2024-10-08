@@ -7,14 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 	"time"
 )
 
 func main() {
 
-	// Load environment variables from .env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
+	// Check if the environment is development or production
+	env := os.Getenv("GIN_MODE")
+	if env == "development" {
+		if err := godotenv.Load(); err != nil {
+			log.Println("No .env file found, using Render's environment variables")
+		}
 	}
 
 	db, err := database.Connect()
