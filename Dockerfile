@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.22-alpine
 
 WORKDIR /app
 
@@ -11,6 +11,8 @@ COPY . .
 WORKDIR /app/cmd/app
 
 RUN go build -o /cmd/app/main .
+
+COPY .env .env
 
 EXPOSE 8080
 

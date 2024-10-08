@@ -1,7 +1,9 @@
 
 services:
   app:
-    container_name: chat-app
-    build: .
+    container_name: chat-app  
+    build: .  
     ports:
-      - "8080:8080"
+      - "8080:8080"  
+    environment:  
+      - ENV_VAR=value
