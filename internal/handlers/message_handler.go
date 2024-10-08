@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 
 	"chat-app-api/internal/models"
@@ -138,13 +139,19 @@ func (h *MessageHandler) sendMessageToSender(msg *services.RealTimeMessageRespon
 }
 
 func (h *MessageHandler) GetFriendsWithLastMessage(c *gin.Context) {
-	userID, err := getUserIDFromQuery(c)
+	currentUserIDString, exists := c.Get("UserID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not logged in"})
+		return
+	}
+
+	currentUserID, err := strconv.ParseUint(currentUserIDString.(string), 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	messages, err := h.messageService.GetFriendListWithLastMessage(userID)
+	messages, err := h.messageService.GetFriendListWithLastMessage(uint(currentUserID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -154,18 +161,25 @@ func (h *MessageHandler) GetFriendsWithLastMessage(c *gin.Context) {
 }
 
 func (h *MessageHandler) GetMessagesBySenderIdAndReceiverId(c *gin.Context) {
+	currentUserIDString, exists := c.Get("UserID")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not logged in"})
+		return
+	}
+
+	currentUserID, err := strconv.ParseUint(currentUserIDString.(string), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
 	friendID, err := getUserIDFromQuery(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid receiver ID"})
 		return
 	}
 
-	currentUserID := uint(3)
-	if currentUserID == friendID {
-		currentUserID = 1
-	}
-
-	messages, err := h.messageService.GetMessagesBySenderIdAndReceiverId(currentUserID, friendID)
+	messages, err := h.messageService.GetMessagesBySenderIdAndReceiverId(uint(currentUserID), friendID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

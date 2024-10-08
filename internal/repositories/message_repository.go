@@ -13,6 +13,7 @@ type FriendsList struct {
 		FirstName       string `json:"first_name"`
 		LastName        string `json:"last_name"`
 		ProfileImageUrl string `json:"profile_image_url"`
+		Username        string `json:"username"`
 	} `json:"profile"`
 	LastSeen    string `json:"last_seen"`
 	UnreadCount int    `json:"unread_count"`
@@ -85,7 +86,7 @@ func (r *messageRepository) GetFriendListWithLastMessage(userID uint) ([]Friends
 	// Query to fetch the friend and the last message details
 	rows, err := r.db.Raw(`
 		SELECT 
-			u.id, u.first_name, u.last_name, u.profile_image_url, 
+			u.id, u.first_name, u.last_name, u.profile_image_url, u.username,
 			m1.content AS last_message_content, 
 			m1.created_at AS last_message_time
 		FROM messages m1
@@ -120,6 +121,7 @@ func (r *messageRepository) GetFriendListWithLastMessage(userID uint) ([]Friends
 			&friend.Profile.FirstName,
 			&friend.Profile.LastName,
 			&friend.Profile.ProfileImageUrl,
+			&friend.Profile.Username,
 			&friend.LastMessage.Content,
 			&lastMessageTime,
 		); err != nil {
