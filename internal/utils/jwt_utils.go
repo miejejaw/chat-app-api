@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
@@ -17,9 +18,17 @@ var (
 )
 
 func init() {
-	// Load environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file")
+	//Check the environment (development or production)
+	env := os.Getenv("GIN_MODE")
+	if env == "" {
+		env = gin.DebugMode // default to debug if GIN_MODE is not set
+	}
+
+	// If we're in debug mode (development), try to load .env file
+	if env == gin.DebugMode {
+		if err := godotenv.Load(); err != nil {
+			log.Println("No .env file found, using environment variables")
+		}
 	}
 
 	// Read environment variables
