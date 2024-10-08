@@ -3,7 +3,6 @@ package main
 import (
 	"chat-app-api/internal/database"
 	"chat-app-api/internal/routes"
-	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -13,14 +12,16 @@ import (
 )
 
 func main() {
-
-	// Check if the environment is development or production
+	// Check the environment (development or production)
 	env := os.Getenv("GIN_MODE")
-	fmt.Println("Environment: ", env)
+	if env == "" {
+		env = gin.DebugMode // default to debug if GIN_MODE is not set
+	}
 
-	if env == "debug" {
+	// If we're in debug mode (development), try to load .env file
+	if env == gin.DebugMode {
 		if err := godotenv.Load(); err != nil {
-			log.Println("No .env file found, using Render's environment variables")
+			log.Println("No .env file found, using environment variables")
 		}
 	}
 
