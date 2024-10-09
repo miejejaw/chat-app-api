@@ -34,9 +34,9 @@ func main() {
 
 	// CORS configuration
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},                   // Allow specific origin
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},            // Allow specific HTTP methods
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"}, // Allow specific headers
+		AllowOrigins:     []string{"http://localhost:5173, https://vercel.com/mierafs-projects/chat-app"}, // Allow specific origin
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},                                        // Allow specific HTTP methods
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},                             // Allow specific headers
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true, // Allow credentials (cookies, authorization headers)
 		MaxAge:           12 * time.Hour,
